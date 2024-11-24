@@ -30,6 +30,11 @@ struct ListBookView: View {
                             categoryVM: categoryVM,
                             bookVM: bookVM
                         )
+                        .onDisappear {
+                            selectedCategoryID = nil
+                            bookVM.fetchBooks()
+                            filter()
+                        }
                     } label: {
                         VStack(alignment: .leading) {
                             Text(book.title)
@@ -46,6 +51,8 @@ struct ListBookView: View {
                     indexSet.forEach { index in
                         let book = bookVM.books[index]
                         bookVM.deleteBook(bookID: book.id)
+                        bookVM.fetchBooks()
+                        filter()
                     }
                 }
             }
@@ -58,7 +65,7 @@ struct ListBookView: View {
                             .onDisappear {
                                 selectedCategoryID = nil
                                 bookVM.fetchBooks()
-                                filteredBooks = bookVM.books
+                                filter()
                             }
                     )
                 }
@@ -71,13 +78,17 @@ struct ListBookView: View {
             filteredBooks = bookVM.books
         }
         .onChange(of: selectedCategoryID) {
-            if let id = selectedCategoryID {
-                filteredBooks = bookVM.books.filter {
-                    $0.categories.contains(where: { $0.id == id })
-                }
-            } else {
-                filteredBooks = bookVM.books
+            filter()
+        }
+    }
+    
+    private func filter() {
+        if let id = selectedCategoryID {
+            filteredBooks = bookVM.books.filter {
+                $0.categories.contains(where: { $0.id == id })
             }
+        } else {
+            filteredBooks = bookVM.books
         }
     }
 }

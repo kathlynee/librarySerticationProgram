@@ -17,7 +17,7 @@ struct AddBookView: View {
     @State private var categories: [Category] = []
     
     var disabled: Bool {
-        return title.trimmingCharacters(in: .whitespaces).isEmpty || author.trimmingCharacters(in: .whitespaces).isEmpty
+        return title.trimmingCharacters(in: .whitespaces).isEmpty || author.trimmingCharacters(in: .whitespaces).isEmpty || categories.isEmpty
     }
 
     var body: some View {

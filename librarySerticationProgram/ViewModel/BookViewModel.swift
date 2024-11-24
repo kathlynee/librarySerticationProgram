@@ -4,7 +4,6 @@
 //
 //  Created by Kathlyne Sarah on 23/11/24.
 //
-
 import Foundation
 import SQLite3
 
@@ -126,13 +125,13 @@ class BookViewModel: ObservableObject {
             sqlite3_bind_int(stmt, 1, bookID)
             
             if sqlite3_step(stmt) == SQLITE_DONE {
+                removeCategoriesFromBook(bookID: bookID)
                 print("STATEMENT SUCCESS")
             } else {
                 print("STATEMENT FAILED")
             }
         }
-        let deleted_id = sqlite3_finalize(stmt)
-        print("DELETED: \(deleted_id)")
+        sqlite3_finalize(stmt)
         fetchBooks()
     }
 }

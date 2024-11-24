@@ -46,6 +46,15 @@ struct ListBorrowingView: View {
                         if !borrowing.returned {
                             Button("Return") {
                                 borrowingVM.returnBook(borrowing: borrowing)
+                                borrowingVM.fetchBorrowings()
+                                
+                                if let id = selectedMemberID {
+                                    filteredBorrowings = borrowingVM.borrowings.filter {
+                                        !$0.returned && $0.memberID == id
+                                    }
+                                } else {
+                                    filteredBorrowings = borrowingVM.borrowings
+                                }
                             }
                         }
                     }
